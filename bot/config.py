@@ -39,6 +39,10 @@ class Settings:
     max_stars: int
     payment_provider: str
     fulfillment_provider: str
+    ton_wallet_address: str
+    toncenter_api_key: str | None
+    ton_low_balance: Decimal
+    ton_critical_balance: Decimal
 
     @property
     def db_path(self) -> Path:
@@ -61,6 +65,10 @@ def load_settings() -> Settings:
         max_stars=int(os.getenv("MAX_STARS", "10000")),
         payment_provider=os.getenv("PAYMENT_PROVIDER", "stub"),
         fulfillment_provider=os.getenv("FULFILLMENT_PROVIDER", "stub"),
+        ton_wallet_address=os.getenv("TON_WALLET_ADDRESS", "").strip(),
+        toncenter_api_key=os.getenv("TONCENTER_API_KEY") or None,
+        ton_low_balance=Decimal(os.getenv("TON_LOW_BALANCE", "2.0")),
+        ton_critical_balance=Decimal(os.getenv("TON_CRITICAL_BALANCE", "0.7")),
     )
 
 
