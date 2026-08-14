@@ -52,7 +52,7 @@ def admin_menu() -> InlineKeyboardMarkup:
         ],
         [InlineKeyboardButton(text="👥 Особые цены", callback_data="admin:special")],
         [InlineKeyboardButton(text="📦 Последние заказы", callback_data="admin:orders")],
-        [InlineKeyboardButton(text="⚙️ Статус системы", callback_data="admin:system")],
+        [InlineKeyboardButton(text="⚙️ Статус системы", callback_data="admin:treasury")],
         [InlineKeyboardButton(text="⬅️ В магазин", callback_data="menu:home")],
     ])
 
