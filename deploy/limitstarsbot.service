@@ -1,0 +1,19 @@
+[Unit]
+Description=Limit Stars Telegram Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/limitstarsbot
+EnvironmentFile=/root/limitstarsbot/.env
+ExecStart=/root/limitstarsbot/.venv/bin/python /root/limitstarsbot/run.py
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
