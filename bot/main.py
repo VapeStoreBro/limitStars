@@ -9,7 +9,7 @@ from aiogram.enums import ParseMode
 
 from bot.config import settings
 from bot.db import Database
-from bot.handlers import admin, user
+from bot.handlers import admin, treasury_admin, user
 from bot.services.fulfillment import StubFulfillmentProvider
 from bot.services.payment import StubPaymentProvider
 from bot.services.pricing import PricingService
@@ -36,6 +36,7 @@ async def main() -> None:
 
     bot = Bot(settings.bot_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
+    dp.include_router(treasury_admin.router)
     dp.include_router(admin.router)
     dp.include_router(user.router)
 
