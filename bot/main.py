@@ -13,6 +13,7 @@ from bot.handlers import admin, user
 from bot.services.fulfillment import StubFulfillmentProvider
 from bot.services.payment import StubPaymentProvider
 from bot.services.pricing import PricingService
+from bot.services.treasury import TonTreasury
 
 
 async def main() -> None:
@@ -26,6 +27,12 @@ async def main() -> None:
     pricing = PricingService(db, settings)
     payment = StubPaymentProvider()
     fulfillment = StubFulfillmentProvider()
+    treasury = TonTreasury(
+        settings.ton_wallet_address,
+        settings.toncenter_api_key,
+        settings.ton_low_balance,
+        settings.ton_critical_balance,
+    )
 
     bot = Bot(settings.bot_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
@@ -40,6 +47,7 @@ async def main() -> None:
         pricing=pricing,
         payment=payment,
         fulfillment=fulfillment,
+        treasury=treasury,
         allowed_updates=dp.resolve_used_update_types(),
     )
 
