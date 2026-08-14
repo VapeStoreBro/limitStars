@@ -1,0 +1,18 @@
+[Unit]
+Description=Limit Stars GitHub Deploy Webhook
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/limitstarsbot
+EnvironmentFile=/root/limitstarsbot/.env
+ExecStart=/root/limitstarsbot/.venv/bin/python /root/limitstarsbot/deploy/github_webhook.py
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
