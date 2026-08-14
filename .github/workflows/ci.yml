@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install -r requirements.txt
+      - run: python -m compileall -q bot deploy run.py
+      - name: DB and pricing smoke test
+        env:
+          BOT_TOKEN: test
+        run: |
+          python - <<'PY'
+          import asyncio
+          from pathlib import Path
+          from bot.config import settings
+          from bot.db import Database
+          from bot.services.pricing import PricingService
+          async def main():
+              p=Path('/tmp/limitstars-ci.sqlite3')
+              db=Database(p)
+              await db.init()
+              await db.upsert_user(1,'ciuser','CI')
+              q=await PricingService(db,settings).quote(1,100)
+              assert str(q.total) == '140.00'
+              await db.set_special_price(1,'ciuser','cost',None)
+              q=await PricingService(db,settings).quote(1,100)
+              assert str(q.total) == '125.00'
+          asyncio.run(main())
+          PY
